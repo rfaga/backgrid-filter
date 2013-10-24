@@ -314,7 +314,10 @@
     search: function () {
       var matcher = _.bind(this.makeMatcher(this.searchBox().val()), this);
       var col = this.collection;
-      if (col.pageableCollection) col.pageableCollection.getFirstPage({silent: true});
+      var allModels = this.fullModels || col.models;
+      col.reset(allModels);
+      if (col.pageableCollection) {col.pageableCollection.getFirstPage({silent: true});
+      this.fullModels = this.fullModels || col.slice(0);
       this.collection.reset(this.shadowCollection.filter(matcher), {reindex: false});
     },
 
@@ -323,7 +326,7 @@
     */
     clear: function () {
       this.searchBox().val(null);
-      this.collection.reset(this.shadowCollection.models, {reindex: false});
+      this.collection.reset(this.fullModels, {reindex: false});
     }
 
   });
